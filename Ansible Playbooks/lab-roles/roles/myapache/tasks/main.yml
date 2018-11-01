@@ -1,0 +1,8 @@
+---
+# tasks file for myapache
+
+- name: insatll apcahe package
+  yum:
+    name: httpd
+    state: latest
+

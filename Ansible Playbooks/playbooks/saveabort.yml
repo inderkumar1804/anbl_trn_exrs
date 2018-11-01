@@ -1,0 +1,20 @@
+---
+- name: Create a file saveabort.yml
+  hosts: servera
+  remote_user: devops
+  become: true
+  tasks:
+  - name: check file exists
+    stat: 
+      path: /etc/saveabort.txt
+    register: output   #Storing the output of a task as variable
+
+  - debug:    #to check stored variable output
+      var: output
+  - name: Create /etc/savabort.txt if not exists
+    copy:
+      dest: /etc/saveabort.txt
+      content: " I am there"
+    when: output.stat.exists == false 
+
+    

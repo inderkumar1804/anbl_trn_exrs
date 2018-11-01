@@ -1,0 +1,16 @@
+servera
+serverb
+serverc
+serverd
+
+[webservers]
+servera
+serverb
+
+[database]
+serverc
+serverd
+
+[new:children]
+database
+webservers

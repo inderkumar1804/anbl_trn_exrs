@@ -1,0 +1,18 @@
+---
+- name: to install tree if fail then install http  
+  hosts: servera
+  remote_user: devops
+  become: true
+  tasks:
+  - block: 
+    - name: try installing tree
+      yum:
+        name: tree
+        state: latest
+  
+    rescue:
+    - name: install httpd
+      yum:
+        name: httpd
+        state: latest
+

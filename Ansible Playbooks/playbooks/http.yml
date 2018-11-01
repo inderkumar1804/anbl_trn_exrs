@@ -1,0 +1,28 @@
+---
+- name: configure apache on servers
+  hosts: servera
+  remote_user: devops
+  become: true
+  tasks: 
+  - name: Install httpd
+    yum:
+      name: httpd
+      state: latest
+
+  - name: Start httpd
+    service:
+      name: httpd
+      state: started
+      enabled: yes
+
+  - name: Create index.html page
+    copy: 
+      dest: /var/www/html/index.html
+      content: "Confurged by ansible\n"
+
+  - name: configure firewall for http
+    firewalld:
+      service: http
+      permanent: true
+      state: enabled
+      immediate: yes    #reload the service

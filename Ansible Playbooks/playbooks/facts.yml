@@ -1,0 +1,11 @@
+---
+- name: Configure facts.txt on servera
+  hosts: servera
+  remote_user: devops
+  become: true
+  tasks:
+  - name: configure facts.txt 
+    copy:
+      dest: /root/facts.txt
+      content: "{{ ansible_hostname }} {{ ansible_default_ipv4.address }} {{ ansible_default_ipv4.macaddress }} {{ ansible_memtotal_mb }}"
+      

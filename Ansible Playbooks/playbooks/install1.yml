@@ -1,0 +1,23 @@
+---
+- name: to install telnet if fail  http and tree  
+  hosts: servera
+  remote_user: devops
+  become: true
+  tasks:
+  - block: 
+    - name: try installing tree
+      yum:
+        name: subrat
+        state: latest
+  
+    rescue:
+    - name: install httpd
+      yum:
+        name: indra
+        state: latest
+    always:
+    - name: code from rescue block
+      debug:
+        msg: "hey subrat and indradeo is not part of redhat"
+      
+

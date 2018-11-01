@@ -1,0 +1,11 @@
+---
+- name: configure apache on servers
+  hosts: all
+  remote_user: devops
+  become: true
+  tasks:
+  - name: copy myfile.txt only when hostname is servera
+    copy:
+      dest: /root/myfile.txt
+      src: myfile.txt
+    when: ansible_hostname in groups ['database']

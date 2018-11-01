@@ -1,0 +1,51 @@
+---
+- name: Deploy and start Apche HTTPD service
+  hosts: webserver
+  vars: 
+    web_pkg: httpd
+    firewall_pkg: firewalld
+    web_service: httpd
+    firewall_service: firewalld
+    python_pkg: python-httplib2
+    rule: http
+  tasks:
+    - name: Install required packages
+      yum: 
+        name: 
+        - "{{ web_pkg }}"
+        - "{{ firewall_pkg }}"
+        - "{{ python_pkg }}"
+        state: latest
+
+    - name: Start firewall service
+      service:
+        name: "{{ firewall_service }}"
+        state: started
+        enabled: true
+
+    - name: Start apache service
+      service:
+        name: "{{ web_service }}"
+        state: started
+        enabled: true
+
+    - name: Create index page
+      copy:
+        dest: /var/www/html/index.html
+        content: "Example web content"
+
+    - name: Create firewall rule for webservice
+      firewalld:
+        service: "{{ rule }}"
+        permanent: yes
+        immediate: yes
+        state: enabled
+
+- name: Check web service from localhost
+  become: false
+  hosts: localhost
+  tasks:
+  - name: check web service
+    uri:
+      url: http://servera.lab.example.com
+      status_code: 200

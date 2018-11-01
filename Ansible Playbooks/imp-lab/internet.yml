@@ -1,0 +1,55 @@
+---
+- name: Configure internet service
+  hosts: all
+  remote_user: devops
+  become: true
+  tasks:
+  - name: Install required packages
+    yum:
+      name: 
+      - firewalld
+      - httpd
+      - php-mysql
+      - php
+      - mariadb-server
+      state: latest
+
+  - name: Firewalld service start and enable
+    service:
+      name: firewalld
+      state: started
+      enabled: true
+
+  - name: firewalld confired to allow web service
+    firewalld: 
+      service: http
+      permanent: yes
+      immediate: yes
+      state: enabled
+  
+  - name: httpd start
+    service:
+      name: httpd
+      state: started
+      enabled: true
+      
+  - name: start mariadb
+    service:
+      name: mariadb
+      state: started
+      enabled: true
+
+  - name: copy index.html
+    get_url:
+      url: http://materials.example.com/grading/var/www/html/index.php
+      dest: /var/www/html/index.php
+
+- name: test the web page from localhost
+  hosts: localhost
+  tasks: 
+  - name: test web page
+    uri: 
+      url: http://serverb.lab.example.com
+      status_code: 200
+      
+  
